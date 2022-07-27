@@ -1,0 +1,52 @@
+﻿@page "/"
+
+<PageTitle>Blazor Bindings By Example</PageTitle>
+
+<h1>Blazor Example Bindings</h1>
+
+@if (!Initialised)
+{
+    <p>Loading...</p>
+}
+else
+{
+    <p>To demonstrate bindings in Blazor we will need a model to bind to that has enough properties on it to allow us to exercise a variety of options.</p>
+
+    <h2>Model</h2>
+
+    <p>Our model will be as follows:</p>
+
+    <ul>
+        <li>Id (demonstrate readonly value)</li>
+        <li>Name (demonstrate editable text field)</li>
+        <li>Gender (demonstrate radios)</li>
+        <li>Nationality (demonstrate list)</li>
+        <li>Age (demonstrate editable number field)</li>
+        <li>Salary (demonstrate editable currency field)</li>
+        <li>MarketingOptions (demonstrate checkboxes)</li>
+    </ul>
+
+    <p>The ViewModel will contain a reference to the above Model plus any external data or supporting fields the UI needs:</p>
+    <ul>
+        <li>Countries</li>
+    </ul>
+
+    <p>Here is a simple output of the above using bindings:</p>
+    <ul>
+        <li>Id = @Model.Id</li>
+        <li>Name = @Model.Name</li>
+        <li>Gender = @Model.Gender</li>
+        <li>Nationality = @Model.Nationality</li>
+        <li>Age = @Model.Age</li>
+        <li>Salary = @Model.Salary</li>
+        <li>MarketingOptions = @Model.MarketingOptions</li>
+    </ul>
+
+    <p>Countries are:</p>
+    <ul>
+        @foreach (var country in Countries)
+        {
+            <li>@country.Name (@country.Code)</li>
+        }
+    </ul>
+}

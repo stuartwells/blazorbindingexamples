@@ -1,0 +1,68 @@
+﻿@page "/stringbinding"
+
+<PageTitle>Blazor Bindings By Example - String Binding</PageTitle>
+
+<h1>Blazor Example Bindings - String Binding</h1>
+
+<p class="lead">To demonstrate string bindings in Blazor we use the Name property of our example model.</p>
+
+<p>On our model the Name property is a nullable string and is editable (has a get and set):</p>
+
+<figure>
+    <code class="m-3 p-3 bg-primary bg-opacity-25 fw-bolder">public string? Name { get; set; }</code>
+</figure>
+
+
+@if (!Initialised)
+{
+    <p>Loading...</p>
+}
+else
+{
+    <h2>Option One - Element Content</h2>
+
+    <p class="lead">Bind the Name property into the content of an element, such as a paragraph, using the syntax:</p>
+
+    <figure>
+        <code class="m-3 p-3 bg-primary bg-opacity-25 fw-bolder">@@Model.Name</code>
+    </figure>
+
+    <p class="m-3 p-3 bg-secondary bg-opacity-25 fw-bolder">The name of this model is "@Model.Name".</p>
+
+
+    <h2>Option Two - Attribute Content</h2>
+
+    <p class="lead">Bind the Name property into the attribute of an element, such as a paragraph title, using the syntax:</p>
+
+    <figure>
+        <code class="m-3 p-3 bg-primary bg-opacity-25 fw-bolder">@@Model.Name</code>
+    </figure>
+
+    <p class="m-3 p-3 bg-secondary bg-opacity-25 fw-bolder" title="About @Model.Name">The title contains the value of the Name property.</p>
+
+    <h2>Option Three - Conditional Content</h2>
+
+    <p class="lead">Bind the Name property into both the content and attribute of an element, such as a paragraph title, using conditional syntax:</p>
+
+    <figure>
+        <code class="m-3 p-3 bg-primary bg-opacity-25 fw-bolder">@@Model.Name</code>
+    </figure>
+
+    <p class="m-3 p-3 bg-secondary bg-opacity-25 fw-bolder" title="@(string.IsNullOrWhiteSpace(Model.Name) ? "Unknown Name" : "About " + Model.Name )">
+        The property Name does @(string.IsNullOrWhiteSpace(Model.Name) ? "not " : string.Empty ) have a value.
+    </p>
+
+    <h2>Option Four - Editable Content</h2>
+
+    <p class="lead">Bind the Name property into an editable element, such as a text input, using the syntax:</p>
+
+    <figure>
+        <code class="m-3 p-3 bg-primary bg-opacity-25 fw-bolder">@@bind-value="Model.Name"</code>
+    </figure>
+
+    <div class="m-3 p-3 bg-secondary bg-opacity-25 fw-bolder">
+        <label for="opt4">Name:</label>
+        <input id="opt4" type="text" @bind-value="Model.Name">
+        <p>The value of Name is "@Model.Name".</p>
+    </div>
+}
