@@ -1,0 +1,119 @@
+﻿@page "/enumbinding"
+@using BlazorBindingExamples.Models
+
+<PageTitle>Blazor Bindings By Example - Enum Binding</PageTitle>
+
+<h1>Blazor Example Bindings - Enum Binding</h1>
+
+<p class="lead">To demonstrate enum bindings in Blazor we use the Gender property of our example model.</p>
+
+<p>On our model the Gender property is a nullable enum and is editable (has a get and set):</p>
+
+<figure>
+    <code class="m-3 p-3 bg-primary bg-opacity-25 fw-bolder">public Gender? Gender { get; set; }</code>
+</figure>
+
+<p>The Gender enum is declared as:</p>
+
+<figure>
+    <pre class="m-3 p-3 bg-primary bg-opacity-25 fw-bolder">
+        public enum Gender
+        {
+            Undefined = 0,
+            Female,
+            Male
+        }
+    </pre>
+</figure>
+
+@if (!Initialised)
+{
+    <p>Loading...</p>
+}
+else
+{
+
+    <h2>Option One - ReadOnly Output</h2>
+
+    <p class="lead">The Gender property can be bound in much the same was as a string property. Even though enums are really an integer, their default output will in fact be their ToString() value:</p>
+
+    <figure>
+        <code class="m-3 p-3 bg-primary bg-opacity-25 fw-bolder">@@Model.Gender</code>
+    </figure>
+
+    <p class="m-3 p-3 bg-secondary bg-opacity-25 fw-bolder">The gender of this model is "@Model.Gender".</p>
+
+    <p>If we did want the underlying integer value we could cast the property it to an int (note if the property were null we would get an empty string '""'):</p>
+
+    <figure>
+        <code class="m-3 p-3 bg-primary bg-opacity-25 fw-bolder">@@((int)Model.Gender)</code>
+    </figure>
+
+    <p>or, as in our case it might be null, use conditional logic:</p>
+
+    <figure>
+        <code class="m-3 p-3 bg-primary bg-opacity-25 fw-bolder">@@(Model.Gender.HasValue ? (int)Model.Gender : "Gender is null")</code>
+    </figure>
+
+    <p class="m-3 p-3 bg-secondary bg-opacity-25 fw-bolder">The gender integer value of this model is "@(Model.Gender.HasValue ? (int)Model.Gender : "Gender is null")"</p>
+
+    <h2>Option Two - Dropdown List</h2>
+
+    <p class="lead">Bind the Gender property to an editable element, such as a dropdown list, that defaults to the current value (if any), using the syntax:</p>
+
+    <figure>
+        <pre class="m-3 p-3 bg-primary bg-opacity-25 fw-bolder">
+        &lt;select @@bind="Model.Gender"&gt;
+            @@foreach (var value in Enum.GetValues(typeof(Gender)))
+            {
+                &lt;option value="@@value"&gt;@@value&lt;/option&gt;
+            }
+        &lt;/select&gt;
+        </pre>
+    </figure>
+
+    <label for="gender-1">Gender:</label>
+    <select id="gender-1" class="m-3 p-3 bg-secondary bg-opacity-25 fw-bolder" @bind="Model.Gender">
+        <option value="">Gender is null</option>
+        @foreach (var optionValue in Enum.GetValues<Gender>())
+        {
+            <option value="@optionValue">@optionValue</option>
+        }
+    </select>
+
+    <p>We have allowed the above to select Gender as null for demo purposes - set it to null to see how this affects the other binding examples.</p>
+
+    <h2>Option Three - Radios</h2>
+
+    <p class="lead">Bind the Gender property to an editable element, such as a radios, that defaults to the current value (if any), using the syntax (using Blazor InputRadioGroup/InputRadio here insteda of raw html):</p>
+
+    <figure>
+        <pre class="m-3 p-3 bg-primary bg-opacity-25 fw-bolder">
+        &lt;EditForm Model="Model"&gt;
+            &lt;label for="gender-radios"&gt;Gender:&lt;/&lt;label&gt;
+            &lt;InputRadioGroup id="gender-radios" @@bind-Value="Model.Gender"&gt;
+                @@foreach (var radioValue in Enum.GetValues&lt;Gender&gt;())
+                {
+                    &lt;InputRadio Value="radioValue" /&gt;
+                    @@radioValue
+                }
+            &lt;/&lt;InputRadioGroup&gt;
+        &lt;/&lt;EditForm&gt;
+        </pre>
+    </figure>
+
+    <EditForm Model="Model">
+        <label for="gender-radios">Gender:</label>
+        <InputRadioGroup id="gender-radios" @bind-Value="Model.Gender">
+            @foreach (var radioValue in Enum.GetValues<Gender>())
+            {
+                <InputRadio Value="radioValue" />
+                <span>&nbsp;</span>
+                @radioValue
+                <span>&nbsp;&nbsp;&nbsp;&nbsp;</span>
+            }
+        </InputRadioGroup>
+    </EditForm >
+
+    <p>Try using 'Dropdown List' example above to set selected Gender to null - radios are all blank.</p>
+}
